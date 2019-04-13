@@ -84,10 +84,11 @@ class ImagAug:
         cv.imwrite('data/{}'.format(img_name), self.img)
 
 
-image = cv.imread('data/cat.jpg')
-for _ in range(50):
-    new_img = ImagAug()
-    new_img.generate(image)
-    new_img.save('cat.jpg')
+if __name__ == '__main__':
+    image = cv.imread('data/cat.jpg')
+    for _ in range(50):
+        new_img = ImagAug()
+        new_img.generate(image)
+        new_img.save('cat.jpg')
 
 
