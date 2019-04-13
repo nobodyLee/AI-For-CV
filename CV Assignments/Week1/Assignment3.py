@@ -3,6 +3,7 @@ Assignment 3:
 Combine image crop, color shift, rotation and perspective transform together to
 complete a data augmentation script
 """
+import os
 import random
 import numpy as np
 import cv2 as cv
@@ -11,7 +12,8 @@ import cv2 as cv
 class ImagAug:
 
     def __init__(self):
-        pass
+        self.img = None
+        self.name = ''
 
     def crop(self, img):
         h, w, _ = img.shape
@@ -65,15 +67,27 @@ class ImagAug:
         return img_warp
 
     def generate(self, img):
-        gene_func = random.choice([self.crop, self.color_shift, self.rotate, self.perspective_transform])
-        return gene_func(img)
+        gene_funcs = random.choices([self.crop, self.color_shift, self.rotate, self.perspective_transform],
+                                    k=random.randint(1, 4))
+        for func in gene_funcs:
+            self.img = func(img)
+            self.name = self.name + ' ' + func.__name__
+        return self.img
 
-    def save(self, path):
-        pass
+    def save(self, name):
+        img_name = self.name + ' ' + name
+        # Check if img_name exists, if True, plus 1
+        img_num = 1
+        while os.path.exists('data/{}'.format(img_name)):
+            img_name = str(img_num) + self.name + ' ' + name
+            img_num += 1
+        cv.imwrite('data/{}'.format(img_name), self.img)
 
 
 image = cv.imread('data/cat.jpg')
-new_img = ImagAug()
+for _ in range(50):
+    new_img = ImagAug()
+    new_img.generate(image)
+    new_img.save('cat.jpg')
 
-cv.imshow('crop', new_img.generate(image))
-cv.waitKey(0)
+
