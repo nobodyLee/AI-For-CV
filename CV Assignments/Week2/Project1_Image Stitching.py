@@ -33,8 +33,8 @@ def match(descripter1, descripter2):
 
 def homography(keypoints1, keypoints2, matches):
     """Calculate homography"""
-    pts1 = np.float32([keypoints1[i[0].queryIdx].pt for i in matches]).reshape(-1, 1, 2)
-    pts2 = np.float32([keypoints2[i[0].trainIdx].pt for i in matches]).reshape(-1, 1, 2)
+    pts1 = np.float32([keypoints1[i[0].queryIdx].pt for i in matches])
+    pts2 = np.float32([keypoints2[i[0].trainIdx].pt for i in matches])
     matrix, mask = cv.findHomography(pts2, pts1, cv.RANSAC, 5.0)
     return matrix
 
